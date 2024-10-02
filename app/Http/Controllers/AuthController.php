@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ShowUserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -10,6 +11,18 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function profile($id){
+        $user = User::findOrFail($id);
+        if(is_null($user)){
+            return response()->json([
+                'success' => false,
+                'message' => 'User tidak ditemukan',
+            ], 404);
+        }
+
+        return new ShowUserResource($user);
+    }
+
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
             'email'     => 'required',
@@ -30,6 +43,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Login Berhasil',
             'user'    => auth()->guard('api')->user(),
             'token'   => $token
         ], 200);

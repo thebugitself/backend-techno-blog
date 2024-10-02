@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
@@ -16,12 +16,15 @@ class Category extends Model
     ];
 
     /**
-     * Get the user that owns the Category
+     * Get the articles for the Category
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function user(): BelongsTo
+
+    public function articles(): HasMany
     {
-        return $this->belongsTo(User::class, 'foreign_key', 'other_key');
+        return $this->hasMany(Article::class, 'category_id', 'id');
     }
+
+
 }
