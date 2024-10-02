@@ -18,7 +18,7 @@ class ShowUserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'articles' => $this->articles,
+            'articles' => ArticleResource::collection($this->articles),
         ];
     }
 }

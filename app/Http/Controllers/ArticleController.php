@@ -127,4 +127,30 @@ class ArticleController extends Controller
             'message' => 'Berhasil menghapus artikel',
         ], 200);
     }
+
+    public function search(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'q' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $q = $request->input('q');
+
+        $articles = Article::where('title', 'like', "%$q%")
+            ->orWhere('content', 'like', "%$q%")
+            ->get();
+
+        if ($articles->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data artikel tidak ditemukan',
+            ], 404);
+        }
+
+        return ArticleResource::collection($articles);
+    }
 }

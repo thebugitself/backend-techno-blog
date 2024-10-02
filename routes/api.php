@@ -12,6 +12,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/post', [ArticleController::class, 'store']);
         Route::put('/update/{id}', [ArticleController::class, 'update']);
         Route::delete('/delete/{id}', [ArticleController::class, 'destroy']);
+        Route::get('/search', [ArticleController::class, 'search']);
     });
 
     Route::prefix('categories')->group(function () {
@@ -20,7 +21,7 @@ Route::middleware('auth:api')->group(function () {
         Route::delete('/delete/{id}', [CategoryController::class, 'destroy']);
     });
 
-    Route::get('/users/{id}', [AuthController::class, 'profile']);
+    Route::get('/users', [AuthController::class, 'profile']);
     Route::get('/auth/logout', [AuthController::class, 'logout']);
 });
 

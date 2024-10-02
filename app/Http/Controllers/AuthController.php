@@ -8,19 +8,17 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Contracts\Providers\JWT;
 
 class AuthController extends Controller
 {
-    public function profile($id){
-        $user = User::findOrFail($id);
-        if(is_null($user)){
-            return response()->json([
-                'success' => false,
-                'message' => 'User tidak ditemukan',
-            ], 404);
-        }
-
-        return new ShowUserResource($user);
+    public function profile(Request $request){
+        $user = JWTAuth::parseToken()->authenticate();
+        return response()->json([
+            'success' => true,
+            'message' => 'User Profile',
+            'data'    => new ShowUserResource($user),
+        ], 200);
     }
 
     public function login(Request $request){
